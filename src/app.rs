@@ -1,8 +1,9 @@
 use crate::components::counter::Counter;
+use crate::components::hash::HashCalc;
 use leptos::prelude::*;
 use leptos::{component, view, IntoView};
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet};
-use leptos_router::components::{Router, Route, Routes};
+use leptos_router::components::{Route, Router, Routes};
 use leptos_router::path;
 
 #[component]
@@ -17,12 +18,14 @@ pub fn App() -> impl IntoView {
               <ul class="flex gap-x-4">
                 <li><a href="/">首页</a></li>
                 <li><a href="/counter">计数器</a></li>
+                <li><a href="/hash">hash性能测试</a></li>
               </ul>
             </nav>
             <main>
                 <Routes fallback=|| "Not found.">
                     <Route path=path!("/") view=Home />
                     <Route path=path!("/counter") view=Counter />
+                    <Route path=path!("/hash") view=HashCalc />
                 </Routes>
             </main>
         </Router>
