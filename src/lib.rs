@@ -2,6 +2,7 @@
 use worker::*;
 
 pub mod app;
+pub mod components;
 
 // #[event(fetch)]
 // async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
@@ -57,12 +58,12 @@ async fn fetch(
 
 #[cfg(feature = "ssr")]
 async fn axum_router(env: Env) -> axum::Router {
-    use std::sync::Arc;
-    use axum::Extension;
+    use app::*;
     use axum::routing::get;
+    use axum::Extension;
     use leptos::prelude::*;
     use leptos_axum::{generate_route_list, LeptosRoutes};
-    use app::*;
+    use std::sync::Arc;
 
     let conf = get_configuration(None).unwrap();
     let leptos_options = conf.leptos_options;
