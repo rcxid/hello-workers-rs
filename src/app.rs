@@ -1,6 +1,9 @@
+use crate::components::counter::Counter;
 use leptos::prelude::*;
 use leptos::{component, view, IntoView};
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet};
+use leptos_router::components::{Router, Route, Routes};
+use leptos_router::path;
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -9,9 +12,27 @@ pub fn App() -> impl IntoView {
 
     // let (value, _set_value) = signal(0);
     view! {
-        <div>
-            <div class="text-red-500">Hello Leptos!</div>
-        </div>
+        <Router>
+            <nav>
+              <ul class="flex gap-x-4">
+                <li><a href="/">首页</a></li>
+                <li><a href="/counter">计数器</a></li>
+              </ul>
+            </nav>
+            <main>
+                <Routes fallback=|| "Not found.">
+                    <Route path=path!("/") view=Home />
+                    <Route path=path!("/counter") view=Counter />
+                </Routes>
+            </main>
+        </Router>
+    }
+}
+
+#[component]
+pub fn Home() -> impl IntoView {
+    view! {
+        <div class="text-red-500">Hello Leptos!</div>
     }
 }
 

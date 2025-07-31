@@ -10,7 +10,7 @@ pub fn Counter() -> impl IntoView {
 
     view! {
         <div>
-            <p class:text-red-500=move || value.get() % 2 == 1>
+            <p class:text-red-500=move || value.get() % 2 == 0>
                 <strong>"响应式: "</strong>
                 // you can insert Rust expressions as values in the DOM
                 // by wrapping them in curly braces
@@ -28,9 +28,9 @@ pub fn Counter() -> impl IntoView {
                 // it simply gets the value of count once
                 {value.get()}
             </p>
-            <button on:click=decrement>"点击减1"</button>
-            <button on:click=reset>"数值重置"</button>
-            <button on:click=increment>"点击加1"</button>
+            <button class="btn btn-sm btn-soft" on:click=decrement>"点击减1"</button>
+            <button class="btn btn-sm btn-soft" on:click=reset>"数值重置"</button>
+            <button class="btn btn-sm btn-soft" on:click=increment>"点击加1"</button>
         </div>
     }
 }
