@@ -1,0 +1,19 @@
+{
+  "author": "",
+  "dependencies": {
+    "tailwindcss": "^4.1.11"
+  },
+  "description": "",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.11"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "leptos-tailwind",
+  "scripts": {
+    "build": "npx tailwindcss -i ./input.css -o ./assets/style/tailwind.css",
+    "watch": "npx tailwindcss -i ./input.css -o ./assets/style/tailwind.css --watch"
+  },
+  "version": "1.0.0"
+}

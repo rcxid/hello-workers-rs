@@ -6,7 +6,12 @@ compatibility_date = "2025-07-30"
 #command = "cargo install -q worker-build && worker-build --release"
 
 [build]
-command = "cargo leptos build --release && LEPTOS_OUTPUT_NAME=hello-workers-rs worker-build --release --features ssr"
+command = """
+npx tailwindcss -i ./input.css -o ./assets/style/tailwind.css --minify && \
+cargo leptos build --release && \
+LEPTOS_OUTPUT_NAME=hello-workers-rs \
+worker-build --release --features ssr
+"""
 
 [assets]
 directory = "./target/site"
