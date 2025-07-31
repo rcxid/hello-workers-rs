@@ -2,5 +2,11 @@ name = "hello-workers-rs"
 main = "build/worker/shim.mjs"
 compatibility_date = "2025-07-30"
 
+#[build]
+#command = "cargo install -q worker-build && worker-build --release"
+
 [build]
-command = "cargo install -q worker-build && worker-build --release"
+command = "cargo leptos build --release && LEPTOS_OUTPUT_NAME=hello-workers-rs worker-build --release --features ssr"
+
+[assets]
+directory = "./target/site"
