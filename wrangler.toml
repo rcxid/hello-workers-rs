@@ -4,3 +4,16 @@ compatibility_date = "2025-07-30"
 
 [build]
 command = "cargo install -q worker-build && worker-build --release"
+
+# 开启workers日志
+[observability.logs]
+enabled = true
+
+[[kv_namespaces]]
+binding = "KV_BINDING"
+id = "26ef7f2c2e74426bbdc914ecb069c7e3"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "test"
+database_id = "a8aa9169-7a6b-4c8b-94f8-2146d66a39b1"

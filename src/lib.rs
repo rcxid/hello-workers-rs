@@ -1,3 +1,8 @@
+mod d1;
+mod kv;
+
+use crate::d1::D1;
+use crate::kv::Kv;
 use worker::*;
 
 #[event(fetch)]
@@ -6,6 +11,8 @@ async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
     Router::new()
         .get_async("/", root)
         .get_async("/bing", bing)
+        .get_async("/kv/:key", Kv::get)
+        .get_async("/d1/:key", D1::get)
         .run(req, env)
         .await
 }
