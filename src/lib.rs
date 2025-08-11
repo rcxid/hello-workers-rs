@@ -3,7 +3,30 @@ mod kv;
 
 use crate::d1::D1;
 use crate::kv::Kv;
+use tracing_subscriber::fmt::format::Pretty;
+use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::util::SubscriberInitExt;
+use tracing_web::{performance_layer, MakeConsoleWriter};
 use worker::*;
+
+#[event(start)]
+fn start() {
+    let fmt_layer = tracing_subscriber::fmt::layer()
+        .json()
+        .with_timer(tracing_subscriber::fmt::time::ChronoLocal::new(
+            "%Y-%m-%d %H:%M:%S".to_string(),
+        ))
+        .with_ansi(false) // Only partially supported across JavaScript runtimes
+        .with_file(true)
+        .with_line_number(true)
+        .with_target(false)
+        .with_writer(MakeConsoleWriter); // write events to the console
+    let perf_layer = performance_layer().with_details_from_fields(Pretty::default());
+    tracing_subscriber::registry()
+        .with(fmt_layer)
+        .with(perf_layer)
+        .init();
+}
 
 #[event(fetch)]
 async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
@@ -18,6 +41,7 @@ async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
 }
 
 async fn root(_: Request, _ctx: RouteContext<()>) -> Result<Response> {
+    tracing::info!("Handling request");
     Response::ok("Hello Workers!")
 }
 
