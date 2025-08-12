@@ -1,3 +1,4 @@
+use crate::ServerState;
 use serde::{Deserialize, Serialize};
 use worker::wasm_bindgen::JsValue;
 use worker::{Error, Request, Response, RouteContext};
@@ -11,7 +12,7 @@ pub struct Kv {
 }
 
 impl D1 {
-    pub async fn get(_: Request, ctx: RouteContext<()>) -> worker::Result<Response> {
+    pub async fn get(_: Request, ctx: RouteContext<ServerState>) -> worker::Result<Response> {
         let key = JsValue::from_str(ctx.param("key").ok_or(Error::Infallible)?);
         let d1 = ctx.env.d1("DB")?;
         let statement = d1.prepare("SELECT * FROM kv WHERE key = ?1;");

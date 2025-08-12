@@ -25,3 +25,7 @@ class_name = "SqlCounter"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["SqlCounter"]
+
+[[r2_buckets]]
+binding = "dev_data"
+bucket_name = "dev-data"

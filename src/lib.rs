@@ -1,6 +1,7 @@
 mod d1;
 mod durable_object;
 mod kv;
+mod r2;
 
 use crate::d1::D1;
 use crate::durable_object::sql_count::SqlCounter;
@@ -30,25 +31,28 @@ fn start() {
         .init();
 }
 
+pub struct ServerState {}
+
 #[event(fetch)]
 async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
     console_error_panic_hook::set_once();
-    Router::new()
+    Router::with_data(ServerState {})
         .get_async("/", root)
-        .get_async("/bing", bing)
-        .get_async("/kv/:key", Kv::get)
-        .get_async("/d1/:key", D1::get)
-        .get_async("/obj/count", SqlCounter::count)
+        .get_async("/daily/bing", bing)
+        .get_async("/random/image", r2::random_image)
+        .get_async("/test/kv/:key", Kv::get)
+        .get_async("/test/d1/:key", D1::get)
+        .get_async("/test/obj/count", SqlCounter::count)
         .run(req, env)
         .await
 }
 
-async fn root(_: Request, _ctx: RouteContext<()>) -> Result<Response> {
+async fn root(_: Request, _ctx: RouteContext<ServerState>) -> Result<Response> {
     tracing::info!("Handling request");
     Response::ok("Hello Workers!")
 }
 
-async fn bing(_: Request, _ctx: RouteContext<()>) -> Result<Response> {
+async fn bing(_: Request, _ctx: RouteContext<ServerState>) -> Result<Response> {
     let request = Request::new(
         "https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1",
         Method::Get,
@@ -66,8 +70,7 @@ async fn bing(_: Request, _ctx: RouteContext<()>) -> Result<Response> {
         .and_then(|x| x.as_str())
         .ok_or(Error::Infallible)?;
 
-    let url = format!("https://www.bing.com{url_base}_1920x1080.jpg");
-    let destination_url = Url::parse(url.as_str())?;
-    let status_code = 302;
-    Response::redirect_with_status(destination_url, status_code)
+    let url = format!("https://www.bing.com{url_base}_1920x1080.webp");
+    let request = Request::new(url.as_str(), Method::Get)?;
+    Fetch::Request(request).send().await
 }

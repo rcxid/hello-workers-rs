@@ -1,3 +1,4 @@
+use crate::ServerState;
 use worker::{durable_object, Env, Request, Response, Result, RouteContext, SqlStorage, State};
 
 #[durable_object]
@@ -38,7 +39,7 @@ impl DurableObject for SqlCounter {
 }
 
 impl SqlCounter {
-    pub async fn count(request: Request, ctx: RouteContext<()>) -> Result<Response> {
+    pub async fn count(request: Request, ctx: RouteContext<ServerState>) -> Result<Response> {
         let namespace = ctx.env.durable_object("SQL_COUNTER")?;
         let ud = namespace.id_from_name(request.url()?.path())?;
         let stub = ud.get_stub()?;
