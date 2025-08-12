@@ -1,7 +1,9 @@
 mod d1;
+mod durable_object;
 mod kv;
 
 use crate::d1::D1;
+use crate::durable_object::sql_count::SqlCounter;
 use crate::kv::Kv;
 use tracing_subscriber::fmt::format::Pretty;
 use tracing_subscriber::layer::SubscriberExt;
@@ -36,6 +38,7 @@ async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
         .get_async("/bing", bing)
         .get_async("/kv/:key", Kv::get)
         .get_async("/d1/:key", D1::get)
+        .get_async("/obj/count", SqlCounter::count)
         .run(req, env)
         .await
 }

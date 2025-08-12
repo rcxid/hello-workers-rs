@@ -17,3 +17,11 @@ id = "26ef7f2c2e74426bbdc914ecb069c7e3"
 binding = "DB"
 database_name = "test"
 database_id = "a8aa9169-7a6b-4c8b-94f8-2146d66a39b1"
+
+[[durable_objects.bindings]]
+name = "SQL_COUNTER"
+class_name = "SqlCounter"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["SqlCounter"]
